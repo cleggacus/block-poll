@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css?family=Quicksand&display=swap');
+
+html,
+body{
+  margin: 0;
+  height: 100%;
+  width: 100%;
+}
+
+input{
+  user-select: auto !important;
+}
+
+*{
+  transition: all 0.3s ease-in-out;
+  outline: none;
+  font-family: 'Quicksand', Arial, Helvetica, sans-serif;
+  text-decoration: none;
+  user-select: none;
+}
+
+*:focus{
+  outline: none;
+}
+
+@media only screen and (max-width: 768px) {
+  
+}
