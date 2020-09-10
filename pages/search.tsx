@@ -5,7 +5,7 @@ import { useState } from 'react';
 export default () => {
   const [themeState, setThemeState] = useState(Themes.dark);
   return(
-    <Layout theme={themeState} setTheme={setThemeState} title="Home">
+    <Layout theme={themeState} setTheme={setThemeState} title="Search">
       
     </Layout>
   )

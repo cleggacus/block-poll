@@ -1,0 +1,154 @@
+.navbar{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  list-style-type: none;
+  margin: 0;
+  padding: 0 21px 0 0;
+  overflow: hidden;
+  height: 100%;
+  background-color: var(--bg-navbar);
+  width: 49px;
+  z-index: 2;
+  user-select: none;
+  box-shadow: 0px 0px 6px var(--box-shadow);
+  border-style: solid;
+  border-width: 0 var(--border-width) 0 0;
+  border-color: var(--border-color);
+
+  .themeChange{
+    div{
+      display: none;
+    }
+    
+    .activeTheme{
+        display: block !important;
+    }
+  }
+
+  li{
+    cursor: pointer;
+    display: flex;
+    width: 220px;
+    height: 28px;
+    padding: 7px 0;
+    margin: 7px 0;
+    opacity: 0.6;
+
+    svg{
+      width: 28px;
+      padding: 0 0 0 21px;
+      stroke: var(--fg-navbar);
+    }
+
+    span{
+      flex: 1;
+      font-size: 15pt;
+      text-align: center;
+      font-weight: bold;
+      color: var(--fg-navbar);
+    }
+  }
+  
+  li:hover{
+    opacity: 0.8;
+  }
+
+  .spacer{
+    margin-top: auto;
+  }
+}
+
+
+@media only screen and (min-width: 768px) {
+  .navbar{
+    .activeRoute{
+      border-style: solid;
+      border-color: var(--accent-primary);
+      border-width: 0 0 0 5px;
+
+      span{
+        color: var(--accent-primary);
+      }
+
+      svg{
+        stroke: var(--accent-primary);
+        padding: 0 0 0 16px;
+      }
+    }
+  }
+  .navbar:hover{
+    width: 220px !important;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .navbar{
+    flex-direction: row;
+    width: 100%;
+    height: auto;
+    justify-content: space-between; 
+    padding:  30px;
+    border-width: var(--border-width) 0 0 0;
+    box-sizing: border-box;
+    padding: 20px 30px;
+    border-width: var(--border-width) 0 0 0;
+
+    .mobile{
+      display: block;
+    }
+  
+    .noMobile{
+      display: none;
+    }
+
+    > li:nth-child(1){
+      order: 1;
+    }
+    
+    > li:nth-child(2){
+      order: 2;
+    }
+    
+    > li:nth-child(3){
+      order: 3;
+    }
+    
+    > li:nth-child(4){
+      order: 4;
+    }
+    
+    > li:nth-child(5){
+      order: 5;
+    }
+    
+    > li:nth-child(9){
+      order: 6;
+    }
+
+    li{
+      height: 30px;
+      width: 30px;
+      padding: 0;
+      margin: 0;
+
+      svg{
+        margin: 0;
+        width: 30px;
+      }
+  
+      img{
+        margin: 0;
+        width: 30px;
+      }
+      
+      span{
+        display: none;
+      }
+    }
+
+    .spacer{
+      display: none;
+    }
+  }
+}
