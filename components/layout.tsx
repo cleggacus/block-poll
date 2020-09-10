@@ -14,7 +14,6 @@ interface IProps {
 
 export default (props: IProps) => {
   const resetTheme = () => {
-    console.log(localStorage.getItem('theme'));
     props.setTheme(() => {
       if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
         let osLight = window.matchMedia('(prefers-color-scheme: light)').matches;
