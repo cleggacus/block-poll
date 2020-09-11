@@ -1,4 +1,4 @@
-.login{
+.entry{
   position: fixed;
   top: 0;
   left: 0;
@@ -6,7 +6,7 @@
   height: 100%;
 
   .bg{
-    background-color: var(--bg-content);
+    background-color: var(--bg-dialog);
     position: absolute;
     top: 0;
     left: 0;
@@ -38,10 +38,10 @@
       padding: 60px;
       width: 500px;
       border-radius: 13px;
-      background-color: var(--bg-content);
+      background-color: var(--bg-dialog);
       
       h1{
-        color: var(--fg-content);
+        color: var(--fg-dialog);
         width: 100%;
         text-align: center;
         font-size: 40pt;
@@ -53,7 +53,7 @@
         display: inline-block;
         width: 100%;
         position: relative;
-        color: var(--fg-content);
+        color: var(--fg-dialog);
         font-size: 15pt;
 
         a{
@@ -67,9 +67,9 @@
         box-sizing: border-box;
         border-width: 0;
         border-radius: 100px;
-        background-color: var(--bg-content-ui);
+        background-color: var(--bg-dialog-ui);
         margin-bottom: 25px;
-        color: var(--fg-content);
+        color: var(--fg-dialog);
         padding: 14px 25px;
         font-size: 20pt;
       }
@@ -87,7 +87,7 @@
 @media only screen and (max-width: 768px) {
   .login{
     .bg{
-      background-color: var(--bg-content);
+      background-color: var(--bg-dialog);
 
       img{
         display: none;
@@ -113,9 +113,9 @@
           box-sizing: border-box;
           border-width: 0;
           border-radius: 100px;
-          background-color: var(--bg-content-ui);
+          background-color: var(--bg-dialog-ui);
           margin-bottom: 25px;
-          color: var(--fg-content);
+          color: var(--fg-dialog);
           padding: 12px 25px;
           font-size: 16pt;
         }

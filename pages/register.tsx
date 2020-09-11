@@ -4,11 +4,12 @@ import Link from 'next/link';
 export default () => {
   return(
     <Entry>
-      <h1>Welcome back</h1>
+      <h1>New Account</h1>
       <input placeholder="Username"></input>
       <input type="password" placeholder="Password"></input>
-      <input type="button" value="Login"></input>
-      <Link href="register"><span>Need an account? <a>Register</a></span></Link>
+      <input type="password" placeholder="Repeat Password"></input>
+      <input type="button" value="Register"></input>
+      <Link href="/login"><span>Have an account? <a>Login</a></span></Link>
     </Entry>
   )
 }

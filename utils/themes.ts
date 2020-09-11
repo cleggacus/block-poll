@@ -15,6 +15,10 @@ export interface Theme{
     fgContent: string;
     bgContentUI: string;
 
+    bgDialog: string;
+    fgDialog: string,
+    bgDialogUI: string,
+
     boxShadow: string;
     borderWidth: string;
     borderColor: string;
@@ -35,9 +39,14 @@ const Themes = {
 
       bgNavbar: 'var(--bg-secondary)',
       fgNavbar: 'var(--fg-secondary)',
+
       bgContent: 'var(--bg-primary)',
       fgContent: 'var(--fg-primary)',
       bgContentUI: 'var(--bg-secondary)',
+
+      bgDialog: 'var(--bg-primary)',
+      fgDialog: 'var(--fg-secondary)',
+      bgDialogUI: 'var(--bg-secondary)',
 
       boxShadow: '#0005',
       borderWidth: '0px',
@@ -57,9 +66,14 @@ const Themes = {
 
       bgNavbar: 'var(--bg-primary)',
       fgNavbar: 'var(--fg-primary)',
-      bgContent: 'var(--bg-primary)',
-      fgContent: 'var(--fg-secondary)',
-      bgContentUI: 'var(--bg-secondary)',
+
+      bgContent: 'var(--bg-secondary)',
+      fgContent: 'var(--fg-primary)',
+      bgContentUI: 'var(--bg-primary)',
+
+      bgDialog: 'var(--bg-primary)',
+      fgDialog: 'var(--fg-secondary)',
+      bgDialogUI: 'var(--bg-secondary)',
 
       boxShadow: '#00000033',
       borderWidth: '0px',
@@ -79,9 +93,14 @@ const Themes = {
 
       bgNavbar: 'var(--bg-primary)',
       fgNavbar: 'var(--fg-primary)',
+
       bgContent: 'var(--bg-primary)',
       fgContent: 'var(--fg-primary)',
       bgContentUI: 'var(--bg-tertiary)',
+
+      bgDialog: 'var(--bg-primary)',
+      fgDialog: 'var(--fg-secondary)',
+      bgDialogUI: 'var(--bg-secondary)',
 
       boxShadow: '#00000000',
       borderWidth: '1px',
@@ -103,9 +122,14 @@ const setTheme = (t: Theme) => {
 
   document.documentElement.style.setProperty('--bg-navbar', theme.bgNavbar);
   document.documentElement.style.setProperty('--fg-navbar', theme.fgNavbar);
+  
   document.documentElement.style.setProperty('--bg-content', theme.bgContent);
   document.documentElement.style.setProperty('--bg-content-ui', theme.bgContentUI);
   document.documentElement.style.setProperty('--fg-content', theme.fgContent);
+  
+  document.documentElement.style.setProperty('--bg-dialog', theme.bgDialog);
+  document.documentElement.style.setProperty('--bg-dialog-ui', theme.bgDialogUI);
+  document.documentElement.style.setProperty('--fg-dialog', theme.fgDialog);
 
   document.documentElement.style.setProperty('--box-shadow', theme.boxShadow);
   document.documentElement.style.setProperty('--border-width', theme.borderWidth);
