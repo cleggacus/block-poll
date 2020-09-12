@@ -35,7 +35,7 @@ const Themes = {
       fgPrimary: '#ffffff',
       fgSecondary: '#ffffff',
       fgTertiary: '#ffffff',
-      accentPrimary: '#3dbfc1',
+      accentPrimary: '#2e8f95',
 
       bgNavbar: 'var(--bg-secondary)',
       fgNavbar: 'var(--fg-secondary)',
@@ -96,7 +96,7 @@ const Themes = {
 
       bgContent: 'var(--bg-primary)',
       fgContent: 'var(--fg-primary)',
-      bgContentUI: 'var(--bg-tertiary)',
+      bgContentUI: 'var(--bg-secondary)',
 
       bgDialog: 'var(--bg-primary)',
       fgDialog: 'var(--fg-secondary)',

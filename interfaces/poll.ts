@@ -1,4 +1,5 @@
 export interface Option {
+  date: number;
   name: string;
   votes: number;
 }
@@ -6,5 +7,5 @@ export interface Option {
 export default interface Poll {
   title: string;
   username: string;
-  options: Option[];
+  options: Option[][];
 }

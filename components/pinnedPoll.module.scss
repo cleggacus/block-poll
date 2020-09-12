@@ -5,6 +5,10 @@
   padding: 20px 40px 50px 40px;
   margin: 30px 0 0 0;
   background-color: var(--bg-content-ui);
+  box-shadow: 0px 0px 6px var(--box-shadow);
+  border-style: solid;
+  border-width: var(--border-width);
+  border-color: var(--border-color);
 
   > h1{
     color: var(--fg-content);
@@ -19,14 +23,13 @@
   .pollGraphic{
     display: flex;
     align-items: center;
-    height: 35px;
+    height: 40px;
     border-radius: 100px;
-    background-color: var(--bg-content-ui);
+    background-color: var(--bg-content);
     margin: 20px 0 0 0;
     border-style: solid;
-    border-width: 1px;
-    border-color: var(--fg-content);
-    opacity: 0.7;
+    border-width: var(--border-width);
+    border-color: var(--border-color);
 
     >h1{
       color: var(--fg-content);
@@ -41,6 +44,14 @@
       margin: 0;
       text-align: center;
       flex: 1;
+    }
+  }
+
+  .winner{
+    background-color: var(--accent-primary);
+
+    >h1{
+      color: var(--fg-tertiary);
     }
   }
 }

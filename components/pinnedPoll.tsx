@@ -3,45 +3,49 @@ import Poll from '../interfaces/poll';
 
 interface IProps {
   poll: Poll;
+  children?: React.ReactNode;
 }
 
 export default (props: IProps) => {
-  const getPollPercent = (): [ number[], number ] => {
+  const getPollPercent = (): [ number[], number, number ] => {
+    const options = props.poll.options[0];
     let total = 0;
-    let largest = 0;
+    let winner = 0;
     let percents: number[] = [];
+  
+    for(let i = 0; i < options.length; i++){
+      if(options[i].votes > options[winner].votes)
+        winner = i;
 
-    for(let i = 0; i < props.poll.options.length; i++){
-      if(props.poll.options[i].votes > props.poll.options[largest].votes)
-        largest = i;
-
-      total += props.poll.options[i].votes;
+      total += options[i].votes;
     }
 
-    const sf = 100 / (props.poll.options[largest].votes / total * 100);
+    const sf = 100 / (options[winner].votes / total * 100);
 
-    for(let i = 0; i < props.poll.options.length; i++)
-      percents.push(props.poll.options[i].votes / total * 100);
+    for(let i = 0; i < options.length; i++)
+      percents.push(options[i].votes / total * 100);
 
-    return [ percents, sf ];
+    return [ percents, winner, sf ];
   }
 
   return (
     <div className={styles.pinnedPoll}>
       <h1>{props.poll.title}</h1>
-      <h2>{props.poll.username}</h2>
+      <h2>Posted by {props.poll.username}</h2>
       {
-        props.poll.options.map((option, i) => {
-          const [ percents, sf ] = getPollPercent();
+        props.poll.options[0].map((option, i) => {
+          const [ percents, winner, sf ] = getPollPercent();
 
           return(
-            <div className={styles.pollGraphic} style={{width: `${percents[i] * sf}%`}}>
+            <div className={`${styles.pollGraphic} ${winner == i ? styles.winner : ''}`} style={{width: `${percents[i] * sf}%`}}>
               <h1 className={styles.optionName}>{option.name}</h1>
               <h1 className={styles.optionPercent}>{`${percents[i].toPrecision(3)}%`}</h1>
             </div>
           )
         })
       }
+
+      {props.children}
     </div>
   )
 };
