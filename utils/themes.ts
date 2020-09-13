@@ -31,7 +31,7 @@ const Themes = {
     theme: {
       bgPrimary: '#050d20',
       bgSecondary: '#020818',
-      bgTertiary: '#020818',
+      bgTertiary: '#2e8f95',
       fgPrimary: '#ffffff',
       fgSecondary: '#ffffff',
       fgTertiary: '#ffffff',
@@ -44,11 +44,11 @@ const Themes = {
       fgContent: 'var(--fg-primary)',
       bgContentUI: 'var(--bg-secondary)',
 
-      bgDialog: 'var(--bg-primary)',
-      fgDialog: 'var(--fg-secondary)',
-      bgDialogUI: 'var(--bg-secondary)',
+      bgDialog: '#070f24',
+      fgDialog: 'var(--fg-primary)',
+      bgDialogUI: 'var(--bg-primary)',
 
-      boxShadow: '#0005',
+      boxShadow: '#0003',
       borderWidth: '0px',
       borderColor: '#0a0a0a'
     }
@@ -75,7 +75,7 @@ const Themes = {
       fgDialog: 'var(--fg-secondary)',
       bgDialogUI: 'var(--bg-secondary)',
 
-      boxShadow: '#00000033',
+      boxShadow: '#0003',
       borderWidth: '0px',
       borderColor: '#ffffff'
     }

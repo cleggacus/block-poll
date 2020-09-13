@@ -16,34 +16,24 @@ export default (props: IProps) => {
   const resetTheme = () => {
     props.setTheme(() => {
       if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-        let osLight = window.matchMedia('(prefers-color-scheme: light)').matches;
         let osDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        if (osLight)
-          return Themes.light;
-        else if(osDark)
+        if(osDark)
           return Themes.black;
-        return Themes.dark;
       }else{
         if(localStorage.getItem('theme') == Themes.black.title)
           return Themes.black;
-        else if(localStorage.getItem('theme') == Themes.light.title)
-          return Themes.light;
-        return Themes.dark;
+        else if(localStorage.getItem('theme') == Themes.dark.title)
+          return Themes.dark;
       }
+
+      return Themes.light;
     });
-  }
-  
-  const load = () => {
-    resetTheme();
-    window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', () => resetTheme());
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => resetTheme());
   }
 
   useEffect(() => {
-    if(document.readyState === "complete")
-      load();
-    else
-      window.addEventListener('load', () => load());
+    resetTheme();
+    window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', () => resetTheme());
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => resetTheme());
   }, [])
 
   useEffect(() => {

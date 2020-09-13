@@ -1,6 +1,7 @@
 import styles from './entry.module.scss';
 import { useEffect } from 'react';
 import { Themes, setTheme } from '../utils/themes';
+import Dialog from './dialog';
 
 interface IProps {
   children: React.ReactNode;
@@ -32,11 +33,9 @@ export default (props: IProps) => {
         <img src='/login-graphic.jpg'></img>
       </div>
 
-      <div className={styles.fg}>
-        <div>
-          {props.children}
-        </div>
-      </div>
+      <Dialog>
+        {props.children}
+      </Dialog>
     </div>
   )
 }
