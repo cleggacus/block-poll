@@ -5,7 +5,8 @@ import { useState, useEffect } from 'react';
 import PinnedPoll from '../components/pinnedPoll';
 import MyPoll from '../components/myPoll'; 
 import Poll from '../interfaces/poll'; 
-
+import Connection from '../utils/connection';
+import Message from '../interfaces/message';
 
 const testPolls: Poll[] = [
   {
@@ -47,7 +48,23 @@ const testPolls: Poll[] = [
 
 export default () => {
   const [themeState, setThemeState] = useState(Themes.dark);
-  const [ppState, setPpState] = useState<Poll[]>(testPolls); // pinned polls
+  const [ppState] = useState<Poll[]>(testPolls); // pinned polls
+
+  useEffect(() => {
+    const connection = new Connection();
+    connection.setOnChannelOpen(() => {
+      console.log('open');
+    });
+
+    connection.setOnChannelClose(() => {
+      console.log('close');
+    });
+
+    connection.connect();
+    connection.setOnMessage((_mes: Message) => {
+      
+    });
+  }, [])
 
   return(
     <Layout theme={themeState} setTheme={setThemeState} title="Home">

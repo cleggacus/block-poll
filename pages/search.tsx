@@ -6,13 +6,13 @@ import SearchResult from "../components/searchResult";
 
 export default () => {
   const [themeState, setThemeState] = useState(Themes.dark);
-  const [queryState, setQueryState] = useState("test query");
+  const [queryState] = useState("test query");
 
   return(
     <Layout theme={themeState} setTheme={setThemeState} title="Search">
-      <div className={styles.searchBar}>
+      <div className={styles.search}>
         <input placeholder="Search"></input>
-      <span>Showing results for "{queryState}"</span>
+        <span>Showing results for "{queryState}"</span>
         <SearchResult></SearchResult>
         <SearchResult></SearchResult>
         <SearchResult></SearchResult>

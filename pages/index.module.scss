@@ -1,7 +1,6 @@
 .home{
   box-sizing: border-box;
   width: 100%;
-  padding: 50px 100px;
 
   > h1{
     color: var(--fg-content);
@@ -50,11 +49,5 @@
         }
       }
     }
-  }
-}
-
-@media only screen and (max-width: 768px) {
-  .home{
-    padding: 25px;
   }
 }

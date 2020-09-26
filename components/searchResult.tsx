@@ -16,7 +16,7 @@ export default () => {
           <input type="button" value="Pin to dash" />
         </div>
         
-        <h3>expires in 5h</h3>
+        <h3>expires in 200h</h3>
       </div>
     </div>
   )
