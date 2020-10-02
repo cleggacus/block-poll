@@ -6,10 +6,10 @@ export default class Connection {
   private connection: RTCPeerConnection;
   private socket: typeof Socket;
   private isOpen: boolean;
-  private isInit: boolean;
   private handleOnMessage: ((data: Message) => any) | null;
   private handleChannelOpen: (() => any) | null;
   private handleChannelClose: (() => any) | null;
+  isInit: boolean;
 
   constructor(){
     this.socket = socketIOClient('ws://localhost:3000');
@@ -19,14 +19,15 @@ export default class Connection {
     this.connection = new RTCPeerConnection({
       iceServers: [
         {
-          urls: <string>process.env.turnUrl,
+          urls: [<string>process.env.turnUrl],
           username: process.env.turnUsername,
           credential: process.env.turnCredential
         },
         {
-          urls: <string>process.env.stunUrl
-        }
-      ]
+          urls: [<string>process.env.stunUrl]
+        },
+      ],
+      iceTransportPolicy: 'relay'
     });
 
     this.handleChannelOpen = null;
@@ -34,7 +35,7 @@ export default class Connection {
     this.handleOnMessage = null;
   }
 
-  setOnMessage(handleOnMessage: (data: Message) => any){
+  onMessage(handleOnMessage: (data: Message) => any){
     this.handleOnMessage = handleOnMessage;
 
     this.channel.onmessage = (stuff) => {
@@ -45,12 +46,12 @@ export default class Connection {
     }
   }
 
-  setOnChannelOpen(handleChannelOpen: () => any){
+  onOpen(handleChannelOpen: () => any){
     this.handleChannelOpen = handleChannelOpen;
     this.channel.onopen = this.handleChannelOpen;
   }
 
-  setOnChannelClose(handleChannelClose: () => any){
+  onClose(handleChannelClose: () => any){
     this.handleChannelClose = handleChannelClose;
     this.channel.onclose = this.handleChannelClose;
   }
@@ -72,7 +73,7 @@ export default class Connection {
         });
       }).catch(err => {
         console.log(err);
-      })
+      });
   
       this.socket.on('getOffer', (offer:any) => {
         if(this.channel.readyState != 'open')
@@ -116,6 +117,7 @@ export default class Connection {
     this.socket.on('getCandidate', (candidate:any)=> {
       if(this.channel.readyState != 'open')
         this.connection.addIceCandidate(candidate);
+      
     });
 
     this.channel.onmessage = (stuff) => {
@@ -125,19 +127,22 @@ export default class Connection {
     }
   }
 
-  connect(){
-    this.socket.on('foundSocket', (socketID: string) => {
-      if(this.isOpen){
-        this.onConnect(socketID);
-        this.isOpen = false;
-      }
-    });
-
-    this.socket.emit('findSocket');
+  connect(n = true, socketID?: string){
+    if(socketID){
+      this.onConnect(socketID);
+    }else{
+      this.socket.on('foundSocket', (socketID: string) => {
+        if(this.isOpen){
+          this.onConnect(socketID);
+          this.isOpen = false;
+        }
+      });
+  
+      this.socket.emit('findSocket', n);
+    }
   }
     
   sendMessage(message: Message){
-    if(this.channel)
-      this.channel.send(JSON.stringify(message));
+    this.channel.send(JSON.stringify(message));
   }
 }

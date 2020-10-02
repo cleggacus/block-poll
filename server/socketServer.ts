@@ -3,16 +3,15 @@ import socket from "socket.io";
 
 export default (server: http.Server) => {
   const io = socket(server);
-  let waitingConnection = '';
+  let waitingConnection: string[] = [];
   
   io.on("connection", socket => {
-    socket.on('findSocket', () => {
-      if(waitingConnection){
-        socket.emit('foundSocket', waitingConnection);
-        socket.to(waitingConnection).emit('foundSocket', socket.id);
-        waitingConnection = "";
-      }else
-        waitingConnection = socket.id;
+    socket.on('findSocket', (n: boolean) => {
+      if(waitingConnection.length && n){
+        socket.emit('foundSocket', waitingConnection[0]);
+        socket.to(waitingConnection[0]).emit('foundSocket', socket.id);
+        waitingConnection.shift();
+      }else waitingConnection.push(socket.id);
     });
 
     socket.on('sendOffer', (data:{ id:string, offer:any}) => {

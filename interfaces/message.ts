@@ -1,4 +1,4 @@
-export enum ReqTypes { PlainText, FindClosestNode };
+export enum ReqTypes { findNodes, updateNetwork };
 export enum Status { Sending, Finding, Found };
 
 export default interface Message{
