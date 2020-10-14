@@ -1,117 +1,121 @@
 import Connection from './connection';
+import SetupConnection from './setupConnection';
+import Message from '../interfaces/message';
 import ID from './id';
-import Message, { ReqTypes, Status } from '../interfaces/message';
 
 export default class Peer {
   id: ID;
   optimalTable: ID[];
-  table: {
-    id: ID,
-    connection: Connection
+  
+  private handleOnMessages: {
+    event: string,
+    fn: ((data: any) => any)
   }[];
 
+  table: ({
+    id: ID,
+    connection: Connection | null
+  } | null)[];
+
   constructor(lengthBytes = 2){
-    this.table = [];
+    this.table = Array.apply(null, Array(lengthBytes * 8)) as null[];
     this.id = new ID(lengthBytes);
     this.optimalTable = this.getOptimalTable();
+    this.handleOnMessages = [];
   }
 
-  joinNetwork(n = true){
-    const connection = new Connection();
-    
-    connection.onOpen(() => {
-      console.log('open');
+  joinNetwork(){
+    const setup = new SetupConnection(this.id, true);
+    setup.listen()
+      .then(() => setup.requestTableIds(this.optimalTable))
+      .then(table => setup.requestTable(table))
+  }
 
-      this.joinNetwork(false);
+  sendMessage(event: string, message: Message){
+    if(message.to){
+      const closestNode = this.closestNode(new ID(message.to));
 
-      connection.onMessage(res => {
-        if(!res.to || res.to == this.id.toString('hex')){
-          switch(res.reqType){
-            case ReqTypes.findNodes:
-              this.reqFindNodes(res, connection);
-              break;
-            default:
-              console.log("request type not found");
-              break;
-          }
-        }else{
-          const cn = this.closestNode(Buffer.from(res.to, 'hex'));
+      if(closestNode >= 0)
+        return this.table[closestNode]?.connection?.sendMessage(event, message);
+    }
 
-          if(cn != -1)
-            this.table[cn].connection.sendMessage(res);
-        }
+    return '';
+  }
+
+  on(event: string, fn: (data: Message) => any){
+    let eventPos = -1;
+
+    for(let i = 0; i < this.handleOnMessages.length; i++){
+      if(this.handleOnMessages[i].event == event){
+        eventPos = i;
+        break;
+      }
+    }
+
+    if(eventPos == -1){
+      this.handleOnMessages.push({
+        event: (event),
+        fn: fn
       });
+    }else{
+      this.handleOnMessages[eventPos] = {
+        event: event,
+        fn: fn
+      }
+    }
 
-      if(n){
-        connection.sendMessage({
-          from: this.id.toString('hex'),
-          to: '',
-          reqType: ReqTypes.findNodes,
-          status: Status.Finding,
-          mes: this.optimalTable.map(val => val.toString('hex'))
+    for(let i = 0; i < this.table.length; i++){
+      if(this.table[i]?.connection){
+        this.table[i]?.connection?.on(event, (message: Message) => {
+          if(!message.data.to || message.data.to == this.id.toString()){
+            fn(message);
+          }else{
+            const closestNode = this.closestNode(message.data.to);
+            if(closestNode >= 0){
+              this.table[closestNode]?.connection?.sendMessage(event, message);
+            }else{
+              this.sendMessage('notFound', {
+                session: message.session,
+                to: message.from,
+                from: this.id.toString(),
+                data: {}
+              })
+            }
+          }
         });
       }
-    });
-
-    connection.connect(n);
+    }
   }
 
-  private reqFindNodes(res: Message, connection: Connection){
-    if(res.status == Status.Found){
-      console.log('Found')
-      this.table = res.mes;
-    }else if(res.status == Status.Finding){
-      connection.sendMessage({
-        from: this.id.toString('hex'),
-        to: '',
-        reqType: ReqTypes.findNodes,
-        status: Status.Found,
-        mes: []
-      });
+  onConnect(){
+    
+  }
 
-      for(let i = 0; i < res.mes.length; i++){
-        const cn = this.closestNode(Buffer.from(res.mes[i], 'hex'));
-        if(cn == -1){
-          //me
-        }else{
-          this.table[cn].connection.sendMessage({
-            from: this.id.toString('hex'),
-            to: '',
-            reqType: ReqTypes.findNodes,
-            status: Status.Finding,
-            mes: this.optimalTable.map(val => val.toString('hex'))
-          });
+  closestNode(id: ID){
+    let closest = -1;
+    let distance = this.id.xor(id);
+
+    for(let i = 0; i < this.table.length; i++){
+      if(this.table[i]?.connection){
+        const newDistance = this.table[i]?.id.xor(id);
+
+        if(newDistance?.lt(distance)){
+          distance = newDistance;
+          closest = i;
         }
       }
     }
-  }
 
-  private closestNode(id: ID | Buffer){
-    let closestIndex = -1;
-    let distance = this.id.xor(id);
-
-    for(let i = 0; i< this.table.length; i++){
-      const newDistance = this.table[i].id.xor(id);
-
-      if(newDistance < distance){
-        distance = newDistance;
-        closestIndex = i;
-      }
-    }
-
-    return closestIndex;
+    return closest;
   }
 
   private getOptimalTable(){
-    const sizeBytes = this.id.getSize();
+    const size = this.id.getSize() * 8;
     let ids = [];
 
-    for(let i = 0; i < sizeBytes; i++){
-      for(let j = 0; j < 8; j++){
-        const distance = Buffer.alloc(sizeBytes);
-        distance[sizeBytes-1-i] |= (1 << j);
-        ids.push(this.id.xor(distance));
-      }
+    for(let i = 0; i < size; i++){
+      const distance = Math.pow(2, i);
+      ids.push(this.id.xor(distance.toString(16)));
     }
 
     return ids;

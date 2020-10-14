@@ -1,12 +1,17 @@
 import socketIOClient, {Socket} from 'socket.io-client';
 import Message from '../interfaces/message'; 
+import ID from './id';
 
 export default class Connection {
   private channel: RTCDataChannel;
   private connection: RTCPeerConnection;
   private socket: typeof Socket;
   private isOpen: boolean;
-  private handleOnMessage: ((data: Message) => any) | null;
+  private handleOnMessages: {
+    event: string,
+    fn: ((data: any) => any)
+  }[];
+  
   private handleChannelOpen: (() => any) | null;
   private handleChannelClose: (() => any) | null;
   isInit: boolean;
@@ -26,23 +31,51 @@ export default class Connection {
         {
           urls: [<string>process.env.stunUrl]
         },
-      ],
-      iceTransportPolicy: 'relay'
+      ]
     });
 
     this.handleChannelOpen = null;
     this.handleChannelClose = null;
-    this.handleOnMessage = null;
+    this.handleOnMessages = [];
   }
 
-  onMessage(handleOnMessage: (data: Message) => any){
-    this.handleOnMessage = handleOnMessage;
+  on(event: string, fn: (data: Message) => any, overide = true){
+    if(overide){
+      let eventPos = -1;
+  
+      for(let i = 0; i < this.handleOnMessages.length; i++){
+        if(this.handleOnMessages[i].event == event){
+          eventPos = i;
+          break;
+        }
+      }
+  
+      if(eventPos == -1){
+        this.handleOnMessages.push({
+          event: event,
+          fn: fn
+        });
+      }else{
+        this.handleOnMessages[eventPos] = {
+          event: event,
+          fn: fn
+        }
+      }
+    }else{
+      this.handleOnMessages.push({
+        event: event,
+        fn: fn
+      });
+    }
 
-    this.channel.onmessage = (stuff) => {
-      const data: Message = JSON.parse(stuff.data);
-
-      if(this.handleOnMessage)
-        this.handleOnMessage(data);
+    this.channel.onmessage = (message) => {
+      const data = JSON.parse(message.data);
+      
+      for(let i = 0; i < this.handleOnMessages.length; i++){
+        if(data.event == this.handleOnMessages[i].event){
+          this.handleOnMessages[i].fn(data.message);
+        }
+      }
     }
   }
 
@@ -65,6 +98,16 @@ export default class Connection {
       this.channel.onopen = this.handleChannelOpen;
       this.channel.onclose = this.handleChannelClose;
 
+      this.channel.onmessage = (message) => {
+        const data = JSON.parse(message.data);
+        
+        for(let i = 0; i < this.handleOnMessages.length; i++){
+          if(data.event == this.handleOnMessages[i].event){
+            this.handleOnMessages[i].fn(data.message);
+          }
+        }
+      }
+
       this.connection.createOffer().then(offer => {
         this.connection.setLocalDescription(offer);
         this.socket.emit('sendOffer', {
@@ -86,6 +129,16 @@ export default class Connection {
         
         this.channel.onopen = this.handleChannelOpen;
         this.channel.onclose = this.handleChannelClose;
+
+        this.channel.onmessage = (message) => {
+          const data = JSON.parse(message.data);
+          
+          for(let i = 0; i < this.handleOnMessages.length; i++){
+            if(data.event == this.handleOnMessages[i].event){
+              this.handleOnMessages[i].fn(data.message);
+            }
+          }
+        }
       };
 
       this.socket.on('getOffer', (offer: any) => {
@@ -119,15 +172,9 @@ export default class Connection {
         this.connection.addIceCandidate(candidate);
       
     });
-
-    this.channel.onmessage = (stuff) => {
-      const data: Message = JSON.parse(stuff.data);
-      if(this.handleOnMessage)
-        this.handleOnMessage(data);
-    }
   }
 
-  connect(n = true, socketID?: string){
+  connectSocket(newPeer = true, socketID?: string){
     if(socketID){
       this.onConnect(socketID);
     }else{
@@ -138,11 +185,34 @@ export default class Connection {
         }
       });
   
-      this.socket.emit('findSocket', n);
+      this.socket.emit('findSocket', newPeer);
     }
   }
+
+  connectNetwork(connection: Connection, me: ID, them: ID, sessionId: string){
+    connection.on('testEvent', message => {
+      if(message.session == sessionId){
+        console.log(sessionId);
+      }
+    }, false);
+
+    connection.sendMessage('testEvent', {
+      session: sessionId,
+      to: them.toString(),
+      from: me.toString(),
+      data: {}
+    })
+  }
     
-  sendMessage(message: Message){
-    this.channel.send(JSON.stringify(message));
+  sendMessage(event: string, message: Message){
+    if(!message.session)
+      message.session = (new ID(4)).toString()
+
+    this.channel.send(JSON.stringify({
+      event: event,
+      message: message
+    }));
+
+    return message.session;
   }
 }

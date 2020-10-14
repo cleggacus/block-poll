@@ -12,6 +12,7 @@ export default (server: http.Server) => {
         socket.to(waitingConnection[0]).emit('foundSocket', socket.id);
         waitingConnection.shift();
       }else waitingConnection.push(socket.id);
+      console.log(waitingConnection)
     });
 
     socket.on('sendOffer', (data:{ id:string, offer:any}) => {
@@ -21,5 +22,10 @@ export default (server: http.Server) => {
     socket.on('sendCandidate', (data:{id: string, candidate: any}) => {
       socket.to(data.id).emit('getCandidate', data.candidate);
     });
+
+    socket.on('disconnect', function() {
+      const i = waitingConnection.indexOf(socket.id)
+      if(i >= 0) waitingConnection.splice(i, 1);
+   });
   });
 }

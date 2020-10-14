@@ -32,25 +32,36 @@ export default (props: IProps) => {
   }
 
   useEffect(() => {
+    // Assigns the canvas element to a variable
     const graph: HTMLCanvasElement | null = document.querySelector(`.${styles.graph}`);
 
     if(graph){
       const ctx = graph.getContext('2d');
+
+      const opts = props.poll.options;
       const winner = getWinner();
-      const largest = props.poll.options[winner][0].votes;
+      const largest = opts[winner][0].votes;
+
+      // Sets ctx resolution based on canvas size
       graph.width = graph.clientWidth;
       graph.height = graph.clientHeight;
 
       if(ctx){
         ctx.lineWidth = 3;
 
-        for(let i = 0; i < props.poll.options[0].length; i++){
+        for(let i = 0; i < opts[0].length; i++){
+          // color of line with '9f' opacity in hex
           ctx.strokeStyle = colors[i] + '9f';
           ctx?.beginPath();
-  
-          for(let j = 0; j < props.poll.options.length; j++){
-            const x = graph.width - (j * (graph.width / (props.poll.options.length - 1)));
-            const y = graph.height - ((graph.height / largest) * props.poll.options[j][i].votes);
+
+          // calculates the position of each point on the graph
+          const start = opts[opts.length-1][i].date;
+          const end = opts[0][i].date;
+          const delta = end - start;
+
+          for(let j = 0; j < opts.length; j++){
+            const x = graph.width * ((opts[j][i].date - start) /  delta);
+            const y = graph.height - ((graph.height / largest) * opts[j][i].votes);
             
             if(!j)
               ctx?.moveTo(x, y);

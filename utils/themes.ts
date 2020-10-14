@@ -110,30 +110,28 @@ const Themes = {
 }
 
 const setTheme = (t: Theme) => {
-  const theme = t.theme;
+  document.documentElement.style.setProperty('--bg-primary', t.theme.bgPrimary);
+  document.documentElement.style.setProperty('--bg-secondary', t.theme.bgSecondary);
+  document.documentElement.style.setProperty('--bg-tertiary', t.theme.bgTertiary);
+  document.documentElement.style.setProperty('--fg-primary', t.theme.fgPrimary);
+  document.documentElement.style.setProperty('--fg-secondary', t.theme.fgSecondary);
+  document.documentElement.style.setProperty('--fg-tertiary', t.theme.fgTertiary);
+  document.documentElement.style.setProperty('--accent-primary', t.theme.accentPrimary);
 
-  document.documentElement.style.setProperty('--bg-primary', theme.bgPrimary);
-  document.documentElement.style.setProperty('--bg-secondary', theme.bgSecondary);
-  document.documentElement.style.setProperty('--bg-tertiary', theme.bgTertiary);
-  document.documentElement.style.setProperty('--fg-primary', theme.fgPrimary);
-  document.documentElement.style.setProperty('--fg-secondary', theme.fgSecondary);
-  document.documentElement.style.setProperty('--fg-tertiary', theme.fgTertiary);
-  document.documentElement.style.setProperty('--accent-primary', theme.accentPrimary);
-
-  document.documentElement.style.setProperty('--bg-navbar', theme.bgNavbar);
-  document.documentElement.style.setProperty('--fg-navbar', theme.fgNavbar);
+  document.documentElement.style.setProperty('--bg-navbar', t.theme.bgNavbar);
+  document.documentElement.style.setProperty('--fg-navbar', t.theme.fgNavbar);
   
-  document.documentElement.style.setProperty('--bg-content', theme.bgContent);
-  document.documentElement.style.setProperty('--bg-content-ui', theme.bgContentUI);
-  document.documentElement.style.setProperty('--fg-content', theme.fgContent);
+  document.documentElement.style.setProperty('--bg-content', t.theme.bgContent);
+  document.documentElement.style.setProperty('--bg-content-ui', t.theme.bgContentUI);
+  document.documentElement.style.setProperty('--fg-content', t.theme.fgContent);
   
-  document.documentElement.style.setProperty('--bg-dialog', theme.bgDialog);
-  document.documentElement.style.setProperty('--bg-dialog-ui', theme.bgDialogUI);
-  document.documentElement.style.setProperty('--fg-dialog', theme.fgDialog);
+  document.documentElement.style.setProperty('--bg-dialog', t.theme.bgDialog);
+  document.documentElement.style.setProperty('--bg-dialog-ui', t.theme.bgDialogUI);
+  document.documentElement.style.setProperty('--fg-dialog', t.theme.fgDialog);
 
-  document.documentElement.style.setProperty('--box-shadow', theme.boxShadow);
-  document.documentElement.style.setProperty('--border-width', theme.borderWidth);
-  document.documentElement.style.setProperty('--border-color', theme.borderColor);
+  document.documentElement.style.setProperty('--box-shadow', t.theme.boxShadow);
+  document.documentElement.style.setProperty('--border-width', t.theme.borderWidth);
+  document.documentElement.style.setProperty('--border-color', t.theme.borderColor);
 }
 
 export {Themes, setTheme};

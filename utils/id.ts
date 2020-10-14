@@ -1,31 +1,52 @@
 import crypto from 'crypto';
 
 export default class ID{
-  private id: Buffer;
+  private id: string;
+  private size: number;
 
-  constructor(buf: Buffer | number = 2){
-    this.id = Buffer.isBuffer(buf) ? buf : crypto.randomBytes(buf);
-  }
-
-  getBuffer(){
-    return this.id;
+  constructor(id: string | number = 2){
+    if(typeof id == 'string'){
+      this.id = (id.length % 2) ? ('0' + id) : id;
+      this.size = this.id.length;
+    }else{
+      this.size = id;
+      this.id = crypto.randomBytes(id).toString('hex');
+    }
   }
 
   getSize(){
-    return this.id.length;
+    return this.size;
   }
 
-  toString(encoding?: "hex" | "ascii" | "utf8" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary" | undefined){
-    return this.id.toString(encoding);
+  toString(encoding?: 'hex' | 'bin' | 'dec' | undefined){
+    if(encoding == 'dec')
+      return parseInt(this.id, 16).toString();
+    if(encoding == 'bin')
+      return parseInt(this.id, 16).toString(2);
+    return this.id;
   }
 
-  xor (id: ID | Buffer) {
-    const idBuf = Buffer.isBuffer(id) ? id : id.getBuffer();
-    const newId = Buffer.allocUnsafe(Math.max(idBuf.length, this.id.length));
+  lt(id: ID | string){
+    if(typeof id == 'string')
+      id = new ID(id);
+
+    return parseInt(this.toString('dec')) < parseInt(id.toString('dec'))
+  }
+
+  xor (id: ID | string) {
+    let other = typeof id == 'string' ? parseInt(id, 16).toString(2) : id.toString('bin');
+    let me = this.toString('bin');
+
+    while (other.length < me.length)
+      other = '0' + other;
+    while (other.length > me.length)
+      me = '0' + me;
+      
+    let newId = '';
   
-    for (var i = 0; i < newId.length; ++i)
-      newId[i] = idBuf[i] ^ this.id[i];
+    for (var i = 0; i < me.length; ++i)
+      newId += parseInt(me[i]) ^ parseInt(other[i]);
   
-    return new ID(newId);
+    return new ID(parseInt(newId, 2).toString(16));
   }
 }

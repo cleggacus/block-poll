@@ -6,45 +6,10 @@ import PinnedPoll from '../components/pinnedPoll';
 import MyPoll from '../components/myPoll'; 
 import Poll from '../interfaces/poll'; 
 import Peer from '../utils/peer';
+import data from './testGraphData.json';
 // import Message from '../interfaces/message';
 
-const testPolls: Poll[] = [
-  {
-    title: 'Test Title 1',
-    username: 'username1',
-    options: [
-      [
-        { name: 'option 1', votes: 13, date: Date.now() },
-        { name: 'option 2', votes: 7, date: Date.now() },
-        { name: 'option 3', votes: 10, date: Date.now() },
-      ],
-      [
-        { name: 'option 1', votes: 10, date: Date.now() - (1000 * 60 * 60) },
-        { name: 'option 2', votes: 6, date: Date.now() - (1000 * 60 * 60) },
-        { name: 'option 3', votes: 3, date: Date.now() - (1000 * 60 * 60) },
-      ],
-      [
-        { name: 'option 1', votes: 6, date: Date.now() - (1000 * 60 * 60 * 2) },
-        { name: 'option 2', votes: 3, date: Date.now() - (1000 * 60 * 60 * 2) },
-        { name: 'option 3', votes: 1, date: Date.now() - (1000 * 60 * 60 * 2) },
-      ],
-      [
-        { name: 'option 1', votes: 0, date: Date.now() - (1000 * 60 * 60 * 3) },
-        { name: 'option 2', votes: 0, date: Date.now() - (1000 * 60 * 60 * 3) },
-        { name: 'option 3', votes: 0, date: Date.now() - (1000 * 60 * 60 * 3) },
-      ]
-    ]
-  },
-  {
-    title: 'Test Title 2',
-    username: 'username2',
-    options: [[
-      { name: 'option 1', votes: 10, date: Date.now() },
-      { name: 'option 2', votes: 10, date: Date.now() },
-      { name: 'option 3', votes: 15, date: Date.now() },
-    ]]
-  }
-]
+const testPolls: Poll[] = data;
 
 export default () => {
   const [themeState, setThemeState] = useState(Themes.dark);

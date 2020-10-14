@@ -1,0 +1,40 @@
+[
+  {
+    "title":    "Test Title 1",
+    "username": "username1",
+    "options": [
+      [
+        { "name": "option 1", "votes": 13, "date": 1602005372926 },
+        { "name": "option 2", "votes": 7,  "date": 1602005372926 },
+        { "name": "option 3", "votes": 10, "date": 1602005372926 }
+      ],
+      [
+        { "name": "option 1", "votes": 10, "date": 1602001772926 },
+        { "name": "option 2", "votes": 6,  "date": 1602001772926 },
+        { "name": "option 3", "votes": 3,  "date": 1602001772926 }
+      ],
+      [
+        { "name": "option 1", "votes": 6, "date": 1601994572926 },
+        { "name": "option 2", "votes": 3, "date": 1601994572926 },
+        { "name": "option 3", "votes": 1, "date": 1601994572926 }
+      ],
+      [
+        { "name": "option 1", "votes": 0, "date": 1601983772926 },
+        { "name": "option 2", "votes": 0, "date": 1601983772926 },
+        { "name": "option 3", "votes": 0, "date": 1601983772926 }
+      ]
+    ]
+  },
+  {
+    "title":    "Test Title 2",
+    "username": "username2",
+    "options": [
+      [
+        { "name": "option 1", "votes": 10, "date": 1602005372926 },
+        { "name": "option 2", "votes": 10, "date": 1602005372926 },
+        { "name": "option 3", "votes": 15, "date": 1602005372926 }
+      ]
+    ]
+  }
+]
+

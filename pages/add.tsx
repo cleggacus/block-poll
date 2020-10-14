@@ -10,6 +10,8 @@ export default () => {
       <Dialog>
         <h1>Create A Poll</h1>
         <input placeholder="Poll Name"></input>
+        <input type="date"></input>
+        <input type="time"></input>
         <input type="button" value="Create"></input>
       </Dialog>
     </Layout>
